@@ -55,5 +55,11 @@ public class IndexController {
         return mv;
     }
 
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id){
+        this.taskService.delete(id);
+        return "redirect:/";
+    }
+
 
 }
