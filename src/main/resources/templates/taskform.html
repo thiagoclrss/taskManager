@@ -1,7 +1,20 @@
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
 <div th:if="${mensagem}" th:text="${mensagem}"></div>
 <form action="/task/form/save" method="POST">
-    Title: <input type="text" id="title" name="title"/>
-    Description: <input type="text" id="description" name="description">
-    Expiration: <input type="text" id="expiration" name="expiration">
+    <div th:if="${task}">
+        <input type="text" readonly id="id" name="id" th:value="${task?.id}"/>
+    </div>
+    Título: <input type="text" id="title" name="title" th:text="${task?.title}"/>
+    Descrição: <input type="text" id="description" name="description" th:text="${task?.description}"/>
+    Validade: <input type="text" id="expiration" name="expiration" th:text="${task?.expiration}"/>
+
+<br />
     <button type="submit">Salvar</button>
 </form>
+
+</body>
+</html>
