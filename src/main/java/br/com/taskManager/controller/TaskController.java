@@ -11,27 +11,29 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Controller
-public class IndexController {
+public class TaskController {
     @Autowired
     private TaskService taskService;
 
     @GetMapping("/task/list")
-    public ModelAndView getList(){
+    public ModelAndView getList() throws ParseException {
         ModelAndView mv = new ModelAndView("index");
         List<Task> taskList = this.taskService.findAll();
-        mv.addObject("tasklist", taskList); //esse método atribui a lista de tarefas a palavra tasklist para ser utilizada no html
+        taskList = sortByDate(taskList);
+        mv.addObject("tasklist", taskList);
         return mv;
     }
 
     @GetMapping("/task/form/add")
     public ModelAndView getFormAdd(){
         ModelAndView mv = new ModelAndView("taskform");
-        List<Task> taskList = this.taskService.getTaskList();
-        mv.addObject("tasklist", taskList);
         return mv;
     }
 
@@ -42,7 +44,6 @@ public class IndexController {
             redirect.addFlashAttribute("mensagem", "Verifique os campos obrigatórios");
             return "redirect:/task/form/add";
         }
-
         this.taskService.save(task);
         return "redirect:/task/list";
     }
@@ -58,8 +59,17 @@ public class IndexController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id){
         this.taskService.delete(id);
-        return "redirect:/";
+        return "redirect:/task/list";
     }
 
-
+    public List<Task> sortByDate(List<Task> taskList) throws ParseException {
+        List<Task> dateTaskList = taskList;
+        for(Task task : dateTaskList){
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            Date dataFormatada = formato.parse(task.getExpiration());
+            task.setExpirationDate(dataFormatada);
+        }
+        Collections.sort(dateTaskList);
+        return dateTaskList;
+    }
 }
