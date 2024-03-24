@@ -22,6 +22,7 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    //Método para acessar a lista de tarefas
     @GetMapping("/task/list")
     public ModelAndView getList() throws ParseException {
         ModelAndView mv = new ModelAndView("index");
@@ -30,13 +31,14 @@ public class TaskController {
         mv.addObject("tasklist", taskList);
         return mv;
     }
-
+    //Método para acessar a o formulário html para adicionar uma tarefa
     @GetMapping("/task/form/add")
     public ModelAndView getFormAdd(){
         ModelAndView mv = new ModelAndView("taskform");
         return mv;
     }
-
+    //Método post que verifica se o usuário passou passou os campos Título e/ou validade em branco, caso sim o uma mensagem "Verifique os campos obrigatórios" é lançada na tela
+    //Caso os campos estejam devidamente preenchidos a tarefa é adicionada no banco. A página é redirecionanda para a lista de tarefas
     @PostMapping("/task/form/save")
     public String saveTask(@Valid Task task, BindingResult result, RedirectAttributes redirect){
 
@@ -47,7 +49,7 @@ public class TaskController {
         this.taskService.save(task);
         return "redirect:/task/list";
     }
-
+    //Método para acessar e editar uma tarefa com base no ID
     @GetMapping("/edit/{id}")
     public ModelAndView getEdit(@PathVariable("id") Long id) {
         ModelAndView mv = new ModelAndView("taskform");
@@ -55,13 +57,13 @@ public class TaskController {
         mv.addObject("task", task);
         return mv;
     }
-
+    //Método para acessar e deletar uma tarefa com base no ID
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id){
         this.taskService.delete(id);
         return "redirect:/task/list";
     }
-
+    //Método para ordenar a lista de tarefas com base na data, a data é convertida de String para Date. A lista é ordenada utilizando Collections.sort()
     public List<Task> sortByDate(List<Task> taskList) throws ParseException {
         List<Task> dateTaskList = taskList;
         for(Task task : dateTaskList){
