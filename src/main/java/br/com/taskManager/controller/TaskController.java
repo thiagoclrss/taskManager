@@ -31,13 +31,13 @@ public class TaskController {
         mv.addObject("tasklist", taskList);
         return mv;
     }
-    //Método para acessar a o formulário html para adicionar uma tarefa
+    //Método para acessar o formulário html para adicionar uma tarefa
     @GetMapping("/task/form/add")
     public ModelAndView getFormAdd(){
         ModelAndView mv = new ModelAndView("taskform");
         return mv;
     }
-    //Método post que verifica se o usuário passou passou os campos Título e/ou validade em branco, caso sim o uma mensagem "Verifique os campos obrigatórios" é lançada na tela
+    //Método post que verifica se o usuário passou os campos Título e/ou validade em branco, caso sim uma mensagem "Verifique os campos obrigatórios" é lançada na tela
     //Caso os campos estejam devidamente preenchidos a tarefa é adicionada no banco. A página é redirecionanda para a lista de tarefas
     @PostMapping("/task/form/save")
     public String saveTask(@Valid Task task, BindingResult result, RedirectAttributes redirect){
